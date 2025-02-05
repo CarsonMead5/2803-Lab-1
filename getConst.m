@@ -6,8 +6,7 @@ function [const] = getConst()
 const.gravity = 9.81; % m/s/s
 
 % Inputs
-const.h0Coaster = 100; % m
+const.h0Coaster = 125; % m
 const.stepSize = 0.1; % m
 
 end
-
