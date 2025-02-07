@@ -1,61 +1,73 @@
 %% Full Rollercoaster Main Function
 
+clear; close all; clc;
 
 %% General Setup
 
 inc = 0.01; % increment of arc length (m)
 h_0 = 125; % start height of coaster (m)
 
-%% Section 1: Transition 1
+% Initializing Maximum G Thresholds
+Gmax_forward = 5;
+Gmax_back = 4;
+Gmax_up = 6;
+Gmax_down = 1;
+Gmax_lat = 3;
 
-% [Gnorm_t1,Glat_t1,Gtan_t1,s_t1] = coaster_t1();
-% 
-% s_tot = s_t1;
 
-%% Section 2: Loop
+%% Section 1: Transition 1 (Carson)
 
-r_l = 10; % radius of loop (m)
-loop_height = 110; % height of center of loop off of the ground (m)
+[Gnorm_t1,Glat_t1,Gtan_t1,s_t1] = coaster_t1(h_0,inc);
+
+s_tot = s_t1;
+
+%% Section 2: Loop (Carson)
+
+r_l = 15; % radius of loop (m)
+loop_height = 105; % height of center of loop off of the ground (m)
 
 [Gnorm_l,Glat_l,Gtan_l,s_l] = coaster_loop(h_0,r_l,loop_height,inc); % Calls loop function
 
-s_tot = s_tot + (s_l + s_tot(end) + inc); % Concatenates arc length vector w/ previous
+s_tot = [s_tot,(s_l + s_tot(end) + inc)]; % Concatenates arc length vector w/ previous
 
-%% Section 3: Transition 2
+%% Section 3: Transition 2 (Carson)
 
 % [Gnorm_t2,Glat_t2,Gtan_t2,s_t2] = coaster_t2();
 
-% s_tot = s_tot + (s_t2 + s_tot(end) + inc); % Concatenates arc length vector w/ previous
+% s_tot = [s_tot, (s_t2 + s_tot(end) + inc)]; % Concatenates arc length vector w/ previous
 
-%% Section 4: 0G Parabola
-
-% [Gnorm_p,Glat_p,Gtan_p,s_p] = coaster_parabola();
-
-% s_tot = s_tot + (s_p + s_tot(end) + inc); % Concatenates arc length vector w/ previous
-
-%% Section 5: Transition 3
+%% Section 4: Transition 3
 
 % [Gnorm_t3,Glat_t3,Gtan_t3,s_t3] = coaster_t3();
 
-% s_tot = s_tot + (s_t3 + s_tot(end) + inc); % Concatenates arc length vector w/ previous
+% s_tot = [s_tot, (s_t3 + s_tot(end) + inc)]; % Concatenates arc length vector w/ previous
 
-%% Section 6: Banked Turn
+%% Section 5: 0G Parabola
 
-% [Gnorm_bt,Glat_bt,Gtan_bt,s_bt] = coaster_bankedturn();
+% [Gnorm_p,Glat_p,Gtan_p,s_p] = coaster_parabola();
 
-% s_tot = s_tot + (s_bt + s_tot(end) + inc); % Concatenates arc length vector w/ previous
+% s_tot = [s_tot, (s_p + s_tot(end) + inc)]; % Concatenates arc length vector w/ previous
 
-%% Section 7: Transition 4
+%% Section 6: Transition 4
 
 % [Gnorm_t4,Glat_t4,Gtan_t4,s_t4] = coaster_t4();
 
-% s_tot = s_tot + (s_t4 + s_tot(end) + inc); % Concatenates arc length vector w/ previous
+% s_tot = [s_tot, (s_t4 + s_tot(end) + inc)]; % Concatenates arc length vector w/ previous
 
-%% Section 8: Braking Section
+%% Section 8: Banked Turn
 
-% [Gnorm_bs,Glat_bs,Gtan_bs,s_bs] = coaster_breakingsection();
+lengthBT = 100; % m
+height = 0; % m
 
-% s_tot = s_tot + (s_bs + s_tot(end) + inc); % Concatenates arc length vector w/ previous
+[Gnorm_bt,Glat_bt,Gtan_bt,s_bt] = coaster_bankedturn(lengthBT,h_0,height,inc);
+
+s_tot = [s_tot, (s_bt + s_tot(end) + inc)]; % Concatenates arc length vector w/ previous
+
+%% Section 9: Braking Section
+
+[Gnorm_bs,Glat_bs,Gtan_bs,s_bs] = coaster_breakingsection(h_0,inc);
+
+s_tot = [s_tot, (s_bs + s_tot(end) + inc)]; % Concatenates arc length vector w/ previous
 
 %% Concatenating G-Force Vectors
 
@@ -69,13 +81,6 @@ s_tot = s_tot + (s_l + s_tot(end) + inc); % Concatenates arc length vector w/ pr
 % Gtan_tot = [Gtan_t1,Gtan_l,Gtan_t2,Gtan_p,Gtan_t3,Gtan_bt,Gtan_t4,Gtan_bs];
 
 %% Checking if G-Force Exceeds Limits
-
-% Setting maximum thresholds
-Gmax_forward = 5;
-Gmax_back = 4;
-Gmax_up = 6;
-Gmax_down = 1;
-Gmax_lat = 3;
 
 % for i = 1:length(Gnorm_tot)
 %     if (Gnorm_tot(i) <= -Gmax_down) || (Gnorm_tot(i) >= Gmax_up)
@@ -117,3 +122,7 @@ Gmax_lat = 3;
 % hold off
 % title("G-Force vs. Arc Length")
 % legend("Normal G-Force","Lateral G-Force","Tangential G-Force")
+
+%% Plot 3D Map of Rollercoaster
+
+% plot3dcoaster(inc);
