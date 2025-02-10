@@ -1,4 +1,4 @@
-function [G_updown,G_lateral,G_backwards,path_length] = coaster_breakingsection(h_0,inc)
+function [G_updown,G_lateral,G_backwards,path_length] = coaster_brakingsection(h_0,inc)
 
 % Define parameters
 g = 9.81; % gravitational acceleration in m/s^2
@@ -19,7 +19,7 @@ G_backwards = (a_maxb / g) * ones(size(path_length)); % constant backward G's
 
 % Creating figure with subplots
 figure()
-sgtitle("Breaking Section Loop G-Forces")
+sgtitle("Braking Section Loop G-Forces")
 
 subplot(3,1,1)
 hold on
