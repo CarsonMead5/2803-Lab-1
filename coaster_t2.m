@@ -1,17 +1,15 @@
+function [Gnorm,Glat,Gtan,s] = coaster_t2(h0,g,inc)
 %Lab 1, ASEN 2803-004, Group 4-10, Armand Etchen, 107290116, MOD 10FEB2025
 %Transition into parabola. Starts from zero slope, ends at slope=0.8
 
-%cleaning
-clear
-close all
-clc
+% Calculating the arc length and G's for the flat intro section
+s_flat = 0:inc:20;
+Gnorm_flat = ones(1,length(s_flat));
+Glat_flat = zeros(1,length(s_flat));
+Gtan_flat = zeros(1,length(s_flat));
 
 %start elevation 90, ends 111.8669
 %arc length 67.4
-
-%const
-g=9.81;
-h0=125;
 
 %velocity
 function  v=velocity(h)
@@ -19,9 +17,9 @@ function  v=velocity(h)
 end
 
 %arc length
-incr=0.1; r=100;
+r=100;
 stot=0.67474*r;
-s=0:incr:stot;
+s=0:inc:stot;
 
 count=length(s);
 sz=size(s);
@@ -42,9 +40,15 @@ for i=1:count
     h(i)=-cos(theta(i))*r+190;
     v(i)=velocity(h(i));
     Gnorm(i)=2*(h0-h(i))/r+cos(s(i)/r);
-    Gtan(i)=-sin(s(i)/r);
 end
-GLat=s*0;
+Gtan = s*0;
+Glat=s*0;
+
+% Concatenating the two section's arc length and g vectors
+s = [s_flat, s + s_flat(end) + inc];
+Gnorm = [Gnorm_flat, Gnorm];
+Glat = [Glat_flat, Glat];
+Gtan = [Gtan_flat, Gtan];
 
 % Plotting the G-Force Graphs
 figure()
@@ -87,3 +91,5 @@ xlim([0,s(end)])
 ylim([-5,6])
 
 print('t2_gforces_2803_lab1','-dpng','-r300') %saves image file (png)
+
+end
