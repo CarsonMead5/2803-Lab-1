@@ -10,11 +10,20 @@ initialBankAngle = acos( 1/gMaxBT ); % rad
 
 % Given length of transition, find the linear change in theta
 lengthT6 = 25; % m
-omega = - initialBankAngle / lengthT6; % rad/m
 
-% Set up distance vector and angle vector
+% Set up distance vector
 distanceT6 = 0:const.stepSize:lengthT6;
-theta = omega * distanceT6 + initialBankAngle;
+
+% Use initial bank angle and length to find fitting cosine function
+amplitude = initialBankAngle/2;
+theta = amplitude * cos(pi/25 * distanceT6) + amplitude;
+
+% Check using plot
+figure();
+plot(distanceT6,theta)
+title('Bank Angle vs Distance')
+ylabel('Radians')
+xlabel('Meters')
 
 %% Modelling the Track
 
