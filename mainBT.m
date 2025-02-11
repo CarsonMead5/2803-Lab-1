@@ -8,7 +8,7 @@ const = getConst();
 const.velocityBT = sqrt( 2 * const.gravity * const.h0Coaster ); % m/s
 
 % Inputs
-gMaxBT = 5; % g's
+gMaxBT = 3; % g's
 
 % Turn Bank Angle, Radius, Length Calcualtions
 bankAngleBT = acos( 1/gMaxBT ); % rad
@@ -33,9 +33,6 @@ title('Banked Turn Track Model')
 xlabel('X-Distance (m)')
 ylabel('Y-Distance (m)')
 zlabel('Z-Distance (m)')
-axis square;
-xlim([-55,55])
-ylim([-55,55])
 zlim([0,5])
 
 %% Modelling Gs Along the Track
