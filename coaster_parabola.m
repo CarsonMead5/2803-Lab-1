@@ -1,86 +1,75 @@
-%Lab 1, ASEN 2803-004, Group 4-10, Armand Etchen, 107290116, MOD 07FEB2025
-%Parabola section
+%% Rollercoaster Zero G Parabola;
+function [Gnorm_p,Glat_p,Gtan_p,s_p,x_end,s_end,z_end,dydx_end] = coaster_parabola(g,h_0,x_0,z_0,slope_i,inc,x_end)
 
-%cleaning
-clear
-close all
-clc
+% Calculating initial velocity slope at entrance
+theta = atan(slope_i);
 
-%const
-g=9.81;
-h0=125;
-
-%velocity
-syms h
-v=sqrt(2*g*(h0-h));
-
-%parabola
+% Creating symbolic equations for the movement of the coaster
 syms x
-y=(-1/100)*x^2+100;
+y = -4.905*((x-x_0)/(sqrt(2*g*(h_0-z_0))*cos(theta)))^2 + sqrt(2*g*(h_0-z_0))*sin(theta)*(x-x_0)/(sqrt(2*g*(h_0-z_0))*cos(theta))+z_0;
+dydx = diff(y,x);
 
-%diffs
-yp=diff(y,x);
-ypp=diff(y,x,2);
+% Determining the end values based on the last t-value
+z_end = -4.905*((x_end-x_0)/(sqrt(2*g*(h_0-z_0))*cos(theta)))^2 + sqrt(2*g*(h_0-z_0))*sin(theta)*(x_end-x_0)/(sqrt(2*g*(h_0-z_0))*cos(theta))+z_0;
+dydx_end = double(subs(dydx,x,x_end));
 
-%dist
-function s=dist(x)
-    s=sqrt(1+(x/50).^2);
+% Creating a symbolic expression for the slope in the parabola
+% dydx = dydt/dxdt;
+
+% Arc length function that will be integrated
+f = sqrt(1+dydx^2);
+
+% Determining the total arc length of the parabola
+s_end = double(int(f,x,x_0,x_end));
+
+% Creating arc length vector with correct increment
+s_p = 0:inc:s_end;
+
+% Calculating g-forces (0 as no g-forces through whole parabola)
+Gnorm_p = zeros(1,length(s_p));
+Glat_p = zeros(1,length(s_p));
+Gtan_p = zeros(1,length(s_p));
+
+% Plotting the G-Force Graphs
+figure()
+sgtitle("Zero-G Parabola G-Forces")
+
+subplot(3,1,1)
+hold on
+plot(s_p,Gnorm_p,'b',LineWidth=1.5)
+yline(6,'r')
+yline(-1,'r')
+hold off
+title("Normal G-Force vs. Distance")
+xlabel("Distance (m)")
+ylabel("G-Force")
+xlim([0,s_p(end)])
+ylim([-2,7])
+
+subplot(3,1,2)
+hold on
+plot(s_p,Glat_p,'b',LineWidth=1.5)
+yline(3,'r')
+yline(-3,'r')
+hold off
+title("Lateral G-Force vs. Distance")
+xlabel("Distance (m)")
+ylabel("G-Force")
+xlim([0,s_p(end)])
+ylim([-4,4])
+
+subplot(3,1,3)
+hold on
+plot(s_p,Gtan_p,'b',LineWidth=1.5)
+yline(5,'r')
+yline(-4,'r')
+hold off
+title("Tangential G-Force vs. Distance")
+xlabel("Distance (m)")
+ylabel("G-Force")
+xlim([0,s_p(end)])
+ylim([-5,6])
+
+print('parabola_gforces_2803_lab1','-dpng','-r300') %saves image file (png)
+
 end
-
-%initialize mat
-x1=-40:60;
-count=length(x1);
-sz=size(x1);
-y1=zeros(sz);v1=zeros(sz); theta1=zeros(sz);
-yp1=zeros(sz);ypp1=zeros(sz);rho1=zeros(sz); gforce=zeros(sz);
-dist1=zeros(sz); gtan=zeros(sz);
-
-%populate mat
-for i=1:count
-    y1(i)=vpa(subs(y,x,x1(i)));
-    v1(i)=vpa(subs(v,h,y1(i)));
-    yp1(i)=vpa(subs(yp,x,x1(i)));
-    ypp1(i)=vpa(subs(ypp,x,x1(i)));
-    rho1(i)=((1+yp1(i)^2)^(3/2))/(abs(ypp1(i)));
-    theta1(i)=90-abs(atand(yp1(i)));
-    gforce(i)=round(v1(i)^2/g/rho1(i)-sind(theta1(i)),10);
-    dist1(i)=integral(@dist,-40,x1(i));
-    gtan(i)=cosd(theta1(i));
-end
-glat=x1*0;
-
-%plot
-figure
-sgtitle('Parabola G-Forces')
-subplot(3,1,1);
-
-plot(dist1,gforce,'b',LineWidth=1.5);
-xlim([0,dist1(end)])
-ylim([-2,7])
-yline(6,'r')
-yline(-1,'r')
-title('Normal G-Forces vs. Distance')
-xlabel('Distance (m)')
-ylabel('G-Force')
-
-subplot(3,1,2);
-plot(dist1,glat,'b',LineWidth=1.5);
-xlim([0,dist1(end)])
-ylim([-2,7])
-yline(6,'r')
-yline(-1,'r')
-title('Lateral G-Forces vs. Distance')
-xlabel('Distance (m)')
-ylabel('G-Force')
-
-subplot(3,1,3);
-plot(dist1,gtan,'b',LineWidth=1.5);
-xlim([0,dist1(end)])
-ylim([-2,7])
-yline(6,'r')
-yline(-1,'r')
-title('Tangential G-Forces vs. Distance')
-xlabel('Distance (m)')
-ylabel('G-Force')
-
-print('parabola_gforces_2803_lab1','-dpng','-r300')
