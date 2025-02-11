@@ -21,16 +21,22 @@ distanceBT = 0:const.stepSize:lengthBT; % Set up array of distance values
 thetaBT = distanceBT / radiusBT; % Use distance value and radius to solve for internal angle
 
 % Use radius and angle to convert to cartesian coordinates
-xBT = radiusBT .* cos(thetaBT);
-yBT = radiusBT .* sin(thetaBT);
+yBT = radiusBT .* cos(thetaBT);
+xBT = radiusBT .* sin(thetaBT);
+zBT(1:length(thetaBT)) = 0;
 
 % Plot the semi-circular track path
 figure();
-plot(xBT,yBT,'k','LineWidth',2)
+plot3(xBT,yBT,zBT,'k','LineWidth',2)
+grid on;
 title('Banked Turn Track Model')
+xlabel('X-Distance (m)')
+ylabel('Y-Distance (m)')
+zlabel('Z-Distance (m)')
 axis square;
 xlim([-55,55])
 ylim([-55,55])
+zlim([0,5])
 
 %% Modelling Gs Along the Track
 
