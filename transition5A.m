@@ -37,3 +37,58 @@ zlabel('Z-Distance (m)')
 ylim([-5,5])
 
 %% Modelling G-Forces Along the Track
+
+count = length(distanceT5A);
+
+for i=1:count
+    theta(i)=distanceT5A(i)/radiusT5A;
+    h(i)=-cos(theta(i))*radiusT5A+190;
+    v(i)=velocity(h(i));
+    Gnorm(i)=2*(const.h0Coaster-h(i))/radiusT5A+cos(distanceT5A(i)/radiusT5A);
+end
+Gtan = distanceT5A*0;
+Glat= distanceT5A*0;
+
+% Plotting the G-Force Graphs
+figure()
+sgtitle("Transition 2 G-Forces")
+
+subplot(3,1,1)
+hold on
+plot(distanceT5A,Gnorm,'b',LineWidth=1.5)
+yline(6,'r')
+yline(-1,'r')
+hold off
+title("Normal G-Force vs. Distance")
+xlabel("Distance (m)")
+ylabel("G-Force")
+xlim([0,distanceT5A(end)])
+ylim([-2,7])
+
+subplot(3,1,2)
+hold on
+plot(distanceT5A,Glat,'b',LineWidth=1.5)
+yline(3,'r')
+yline(-3,'r')
+hold off
+title("Lateral G-Force vs. Distance")
+xlabel("Distance (m)")
+ylabel("G-Force")
+xlim([0,distanceT5A(end)])
+ylim([-4,4])
+
+subplot(3,1,3)
+hold on
+plot(distanceT5A,Gtan,'b',LineWidth=1.5)
+yline(5,'r')
+yline(-4,'r')
+hold off
+title("Tangential G-Force vs. Distance")
+xlabel("Distance (m)")
+ylabel("G-Force")
+xlim([0,distanceT5A(end)])
+ylim([-5,6])
+
+function  v=velocity(h)
+    v=sqrt(2*9.81*(125-h));
+end
