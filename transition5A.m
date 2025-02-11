@@ -55,9 +55,9 @@ sgtitle("Transition 2 G-Forces")
 
 subplot(3,1,1)
 hold on
-plot(distanceT5A,Gnorm,'b',LineWidth=1.5)
-yline(6,'r')
-yline(-1,'r')
+plot(distanceT5A,Gnorm,'k',LineWidth=1.5)
+yline(6,'r--')
+yline(-1,'r--')
 hold off
 title("Normal G-Force vs. Distance")
 xlabel("Distance (m)")
@@ -67,9 +67,9 @@ ylim([-2,7])
 
 subplot(3,1,2)
 hold on
-plot(distanceT5A,Glat,'b',LineWidth=1.5)
-yline(3,'r')
-yline(-3,'r')
+plot(distanceT5A,Glat,'k',LineWidth=1.5)
+yline(3,'r--')
+yline(-3,'r--')
 hold off
 title("Lateral G-Force vs. Distance")
 xlabel("Distance (m)")
@@ -79,9 +79,9 @@ ylim([-4,4])
 
 subplot(3,1,3)
 hold on
-plot(distanceT5A,Gtan,'b',LineWidth=1.5)
-yline(5,'r')
-yline(-4,'r')
+plot(distanceT5A,Gtan,'k',LineWidth=1.5)
+yline(5,'r--')
+yline(-4,'r--')
 hold off
 title("Tangential G-Force vs. Distance")
 xlabel("Distance (m)")
