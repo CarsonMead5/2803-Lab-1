@@ -42,11 +42,13 @@ yT3A(1:length(thetaT3A)) = 0;
 % Initializing Count Vectors
 count = length(distanceT3A);
 Gnorm = zeros(1,count);
+theta = zeros(1,count);
+h = zeros(1,count);
 
 for i=1:count
-    theta(i)=distanceT3A(i)/radiusT3A;
-    h(i)=-cos(theta(i))*radiusT3A+190;
-    Gnorm(i)=2*(const.h0Coaster-h(i))/radiusT3A+cos(distanceT3A(i)/radiusT3A);
+    theta(i)=thetaTotalT3A - distanceT3A(i)/radiusT3A;
+    h(i)=-cos(theta(i))*radiusT3A+radiusT3A;
+    Gnorm(i)=2*(const.h0Coaster-h(i))/radiusT3A+cos(thetaTotalT3A - distanceT3A(i)/radiusT3A);
 end
 Gtan = distanceT3A*0;
 Glat= distanceT3A*0;
@@ -65,7 +67,7 @@ distanceT3B = 0:const.stepSize:lengthT3B;
 
 % Use initial bank angle and length to find fitting cosine function
 amplitude = initialBankAngle/2;
-theta = - amplitude * cos(pi/25 * distanceT3B) + amplitude;
+thetaT3B = - amplitude * cos(pi/25 * distanceT3B) + amplitude;
 
 % % Check using plot
 % figure();
@@ -101,11 +103,11 @@ gFForwardMax(1,1:length(distanceT3B)) = 5;
 gFBackwardMax(1,1:length(distanceT3B)) = 6;
 
 % Calculate Experienced & Allowable G-Forces in the Lateral Direction
-gFLateral = sin(theta);
+gFLateral = sin(thetaT3B);
 gFLateralMax(1,1:length(distanceT3B)) = 3;
 
 % Calculate Experienced & Allowable G-Forces in the Normal Direction
-gFNormal = cos(theta);
+gFNormal = cos(thetaT3B);
 gFUpMax(1,1:length(distanceT3B)) = 6;
 gFDownMax(1,1:length(distanceT3B)) = 1;
 
