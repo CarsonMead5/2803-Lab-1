@@ -1,12 +1,7 @@
+%% Plotting the 3D Coaster with Colored for Velocity
+% function plot3dcoaster()
 %Lab 1, ASEN 2803-004, Group 4-10, Armand Etchen, 107290116, MOD 10FEB2025
 %3D scatter plot of whole roller coaster. Colormap shown for velocity
-
-%TEMP: USING PLACEHOLDER FOR TRANSITION AFTER PARABOLA
-
-%cleaning
-close all
-clear
-clc
 
 %const
 inc=0.1;
@@ -151,10 +146,10 @@ ztot=[ztot, ztwist];
 %braking section
 
 xbrake_start=251.5485;
-xbrake_end=220.2985;
+xbrake_end=210.6735;
 xbrake=xbrake_start:-inc:xbrake_end;
-ybrake=zeros(size(xbrake))+176.777;
-zbrake=zeros(size(xbrake));
+ybrake=zeros(1,length(xbrake))+176.777;
+zbrake=zeros(1,length(xbrake));
 
 xtot=[xtot, xbrake];
 ytot=[ytot, ybrake];
@@ -164,19 +159,25 @@ ztot=[ztot, zbrake];
 v=sqrt(2*9.81*(125-ztot));
 
 %recalculating braking section velocity
-v(23464:end)=linspace(vmax,0,314);
+v(end-length(xbrake)+1:end)=linspace(vmax,0,length(xbrake));
 
 %3D plot
-s=1;
+s=2;
 c=ztot;
 figure
 scatter3(xtot,ytot,ztot,s,v);
 colormap jet
-title('3D Plot');
-xlabel('x (m)');
-ylabel('y (m)');
-zlabel('z (m)');
+title('Rollercoaster 3D Plot');
+xlabel('X-Values (m)');
+ylabel('Y-Values (m)');
+zlabel('Z-Values (m)');
 h=colorbar;
 h.Label.String='Speed (m/s)';
+view([137.5,40])
+xlim([0,400])
+ylim([-75,275])
+zlim([0,175])
 
 print('scatter3_2803_lab1','-dpng','-r300') %saves image file (png)
+
+% end
