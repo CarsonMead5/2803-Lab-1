@@ -83,7 +83,7 @@ xtot=[xtot, xparabola];
 ytot=zeros(size(xtot));
 ztot=[ztot, zparabola];
 
-%t5a PLACEHOLDER
+%t5 
 
 % Inputs for circular element
 xInitialT5A = 201.5485; % m
